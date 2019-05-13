@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-reset.css}" rel="stylesheet">
+    <!--external css-->
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css}" rel="stylesheet" type="text/css" media="screen"/>
+    <link th:href="@{/css/owl.carousel.css}"rel="stylesheet" type="text/css">
+    <!--easyui css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/bootstrap/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/color.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/zTreeStyle.css}"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet" />
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script th:src="@{/js/jquery.js}"></script>
+    <script th:src="@{/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.scrollTo.min.js}"></script>
+
+    <!--easyui Js  -->
+    <script th:src="@{/easyui/jquery.min.js}"></script>
+    <script th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script th:src="@{/easyui/plugins/jquery.datagrid.js}"></script>
+    <script th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:src="@{https://unpkg.com/dayjs}"></script>
+    <script th:src="@{/js/jquery.ztree.all.min.js}"></script>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'west',title:'权限树',split:true,collapsible:true" style="width:200px" >
+    <div id="permissionTree" class="ztree"></div>
+</div>
+<div data-options="region:'center',title:'权限列表'" >
+    <div id="serchForm" style="margin: 12px 0px 12px 13px;">
+        <label>
+            名称：<input name="name" type="text" class="" autofocus>
+        </label>
+        <label>
+            权限字符串：<input name="permission" type="text" class="">
+        </label>
+        <label>
+            资源类型：<input name="resourceType" type="text" class="">
+        </label>
+        <label>
+            <button class="btn btn-info btn-sm" type="submit" style="margin-left: 20px;" onclick="reloadDatagrid(true)">搜索</button>
+        </label>
+        <label>
+            <button class="btn btn-info btn-sm" type="submit" style="margin-left: 20px;" onclick="reloadDatagrid(false)">重置</button>
+        </label>
+    </div>
+    <div id="permissionList" class="my-datagrid"></div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var permissionTree =  null;
+
+    $(document).ready(function(){
+        //加载分类树
+        permissionTree = new CommonFlowTree($('#permissionTree'));
+        //加载用户列表
+        $('#permissionList').datagrid({
+            url: '/permission/findAllPermissionPage',
+            fitColumns: true,
+            singleSelect: true,
+            pagination :true,
+            pageNumber :1,
+            nowrap :true,
+            pageSize :10 ,
+            rownumbers : true,
+            pageList : [5,10,20,30,40,50],
+            columns :
+                [ [
+                    {field: 'id', title: 'ID', width: 10},
+                    {field: 'name', title: '名称', width: 20},
+                    {field: 'parentId', title: '父id', width: 10},
+                    {field: 'permission', title: '权限字符串', width: 10},
+                    {field: 'resourceType', title: '资源类型', width: 20},
+                    {field: 'url', title: '资源路径', width: 20},
+                    {field:'operate',title:'操作',align:'center',width:10,
+                        formatter:function(value,row , index){
+                            var str = '<a class="btn btn-small" >删除</a>';
+                            return str;
+                        }}
+
+                ]]
+        });
+
+    });
+
+    function reloadDatagrid(isSerch) {
+        if(isSerch){
+            var name=$("#serchForm [name=name]").val();
+            var permission=$("#serchForm [name=permission]").val();
+            var resourceType=$("#serchForm [name=resourceType]").val();
+            var param =  {'name':name,'permission':permission,'resourceType':resourceType};
+            $(".my-datagrid").datagrid('load',  param);
+            //解决非法跳转，原因：某个js有单击事件所以取消事件冒泡
+            event.preventDefault();
+        }else{
+            var name=$("#serchForm [name=name]").val('');
+            var permission=$("#serchForm [name=permission]").val('');
+            var resourceType=$("#serchForm [name=resourceType]").val('');
+            $(".my-datagrid").datagrid('load',{});
+            //解决非法跳转，原因：某个js有单击事件所以取消事件冒泡
+            event.preventDefault();
+        }
+    }
+
+</script>
+<script type="text/javascript" th:inline="javascript">
+    var SysTypeTree = function($this, options) {
+        /**
+         * 加载树
+         */
+        this.loadTree = function() {
+            var opts = this.options, url =  opts.url, params = {
+
+            }, depth = opts.depth, setting = {
+                data : {
+                    key : {
+                        name : opts.nameKey
+                    },
+                    simpleData : {
+                        enable : true,
+                        idKey : 'id',
+                        pIdKey : 'parentId',
+                        rootPId : null
+                    }
+                },
+                view : {
+                    showIconFont : true
+                },
+                callback : {
+                    onClick : opts.onClick,
+                    onRightClick :  opts.onRightClick
+                }
+            };
+            //深度合并设置
+            if (opts.setting)
+                setting = $.extend(true, {},  setting, opts.setting);
+            //如果存在数据就不需要从url加载数据了
+            if(opts.dataList){
+                initTree(opts.dataList);
+            }else{
+                $.ajax({url:url,dataType:"json",async:false,success:function(data){
+                        initTree(data);
+                        },error:function(){
+                        console.log("ztree加载失败")
+                }});
+            }
+            function initTree(result) {
+                // 初始化数据
+                tree = $.fn.zTree.init($this,  setting, result);
+                // 展开层级
+                if (depth != null && depth >= 0)  {
+                    tree.expandAll(false);
+
+                    var nodes =  tree.getNodesByFilter(function(node) {
+                        return (node.level ==  depth);
+                    });
+                    if (nodes.length > 0) {
+                        for (var idx = 0; idx <  nodes.length; idx++) {
+                            tree.expandNode(nodes[idx], true, false);
+                        }
+                    }
+                } else {
+                    tree.expandAll(true);
+                }
+                if (typeof opts.onLoaded ==  'function') {
+                    opts.onLoaded.call($this,  tree);
+                }
+            }
+        };
+        /**
+         * 展开收起 type: true 是展开，false是默认
+         */
+        this.expandAll = function(type) {
+            tree.expandAll(type);
+        };
+        this.defaults = {
+            depth : 0, // 展开深度
+            onClick : null,
+            onRightClick : null,
+            nameKey : 'name'
+        };
+        this.getTree = function() {
+            return tree;
+        }
+        // 初始化加载数据
+        {
+            this.tree = null;
+            this.options = $.extend({},  this.defaults, options);
+            this.loadTree();
+        }
+    };
+    var CommonFlowTree = function($this) {
+        var opt = {
+            url : "/permission/permissionTree",
+            onClick : function(event, treeId,  treeNode) {
+                var param =  {'id':treeNode.id};
+                $(".my-datagrid").datagrid('load',  param);
+                //解决非法跳转，原因：某个js有单击事件所以取消事件冒泡
+                event.preventDefault();
+            },
+            onRightClick:function (event, treeId,  treeNode) {
+                debugger
+            },
+            dataList:[[${dataList}]]
+        };
+        return new SysTypeTree($this,opt);
+    }
+</script>
+</html>

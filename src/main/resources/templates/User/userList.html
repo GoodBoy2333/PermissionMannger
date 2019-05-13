@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户管理</title>
+    <!--公共头部引入-->
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-reset.css}" rel="stylesheet">
+    <!--external css-->
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css}" rel="stylesheet" type="text/css" media="screen"/>
+    <link th:href="@{/css/owl.carousel.css}"rel="stylesheet" type="text/css">
+    <!--easyui css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/bootstrap/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/color.css}"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet" />
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script th:src="@{/js/jquery.js}"></script>
+    <script th:src="@{/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.scrollTo.min.js}"></script>
+
+    <!--easyui Js  -->
+    <script th:src="@{/easyui/jquery.min.js}"></script>
+    <script th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script th:src="@{/easyui/plugins/jquery.datagrid.js}"></script>
+    <script th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:src="@{https://unpkg.com/dayjs}"></script>
+</head>
+<body>
+<div class="container">
+    <a th:text="${session.permissionObjects}"></a>
+    <a class="btn btn-small" th:onclick="insert()">新增</a>
+    <div id="userList"></div>
+</div>
+<div class="container" id="insert" style="display: none">
+    新增
+    <form th:action="@{/userInfo/insert}" method="post">
+        <input type="hidden" name="id">
+        用户名：<input type="text" name="userName"><br>
+        密码：<input type="password" name="userPwd"><br>
+        电话：<input type="tel" name="tel"><br>
+        邮箱：<input type="email" name="mail"><br>
+        性别：<input type="text" name="sex"><br>
+        创建时间：<input type="text" class="easyui-datetimebox" name="createDate"><br>
+        <input type="submit" value="提交">
+        <input type="reset" value="重置"><br>
+    </form>
+</div>
+<div class="container" id="update" style="display: none">
+    修改
+    <form th:action="@{/userInfo/updateById}" method="post">
+        <input type="hidden" name="id">
+        用户名：<input type="text" name="userName"><br>
+        密码：<input type="password" name="userPwd"><br>
+        电话：<input type="tel" name="tel"><br>
+        邮箱：<input type="email" name="mail"><br>
+        性别：<input type="text" name="sex"><br>
+        创建时间：<input type="text" name="createDate"><br>
+        <input type="submit" value="提交">
+        <input type="reset" value="重置"><br>
+    </form>
+</div>
+<script type="text/javascript">
+    window.onload = function () {
+        loadDataGrid();
+    }
+
+    function loadDataGrid() {
+        $('#userList').datagrid({
+            url: '[[@{/userInfo/findAllUsersPage}]]',
+            fitColumns: true,
+            singleSelect: true,
+            pagination :true,
+            pageNumber :1,
+            nowrap :true,
+            pageSize :10 ,
+            rownumbers : true,
+            pageList : [5,10,20,30,40,50],
+            columns :
+                [ [
+                    {field: 'id', title: 'ID', width: 10},
+                    {field: 'userName', title: '用户名', width: 10},
+                    {field: 'userPwd', title: '密码', width: 10},
+                    {field: 'mail', title: '邮箱', width: 20},
+                    {field: 'createDate', title: '创建时间', width: 40,formatter:function (value,row,index) {
+                            return value;
+                    }},
+                    {field:'operate',title:'操作',align:'center',width:10,
+                        formatter:function(value,row , index){
+                            var str = '<a class="btn btn-small" onclick="deleteUser('+row.id+')">删除</a>';
+                            return str;
+                    }}
+
+                ]]
+        });
+    }
+
+
+    function insert() {
+        $("#insert").show();
+        document.querySelector("#insert input[name=createDate]").value = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss');
+        document.querySelector("#insert input[name=id]").value = new Date().getMilliseconds();
+    }
+
+    function update(id) {
+        $("#update").show();
+        $.ajax({
+            url: "/userInfo/getUserJsonById/" + id,
+            type: 'get',
+            dataType: 'json',
+            async: true,
+            success: function (user) {
+                $("#update input[name=id]").val(user.id);
+                $("#update input[name=userName]").val(user.userName);
+                $("#update input[name=userPwd]").val(user.userPwd);
+                $("#update input[name=tel]").val(user.tel);
+                $("#update input[name=mail]").val(user.mail);
+                $("#update input[name=sex]").val(user.sex);
+                $("#update input[name=createDate]").val(user.createDate);
+                debugger
+            },
+            error: function (e) {
+                console.log(e.responseText)
+            }
+        });
+    }
+
+    function deleteUser(id) {
+        $.ajax({
+            url: "/userInfo/deleteById/" + id,
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (data > 0) {
+                    alert('删除成功');
+                    location.reload()
+                } else {
+                    alert('未成功删除');
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

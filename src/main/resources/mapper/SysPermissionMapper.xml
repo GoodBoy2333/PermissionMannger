@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.PermissionMannger.Mapper.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.fy.PermissionMannger.Entity.SysPermission">
+    <!--@mbg.generated-->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="NAME_" jdbcType="VARCHAR" property="name" />
+    <result column="AVAILABLE_" jdbcType="VARCHAR" property="available" />
+    <result column="PARENT_ID_" jdbcType="VARCHAR" property="parentId" />
+    <result column="PARENT_IDS_" jdbcType="VARCHAR" property="parentIds" />
+    <result column="PERMISSION_" jdbcType="VARCHAR" property="permission" />
+    <result column="RESOURCE_TYPE_" jdbcType="VARCHAR" property="resourceType" />
+    <result column="URL_" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    ID_, NAME_, AVAILABLE_, PARENT_ID_, PARENT_IDS_, PERMISSION_, RESOURCE_TYPE_, URL_
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_PERMISSION
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from SYS_PERMISSION
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysPermission" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_PERMISSION (NAME_, AVAILABLE_, PARENT_ID_, 
+      PARENT_IDS_, PERMISSION_, RESOURCE_TYPE_, 
+      URL_)
+    values (#{name,jdbcType=VARCHAR}, #{available,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, #{resourceType,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysPermission" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_PERMISSION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null and name != ''">
+        NAME_,
+      </if>
+      <if test="available != null and available != ''">
+        AVAILABLE_,
+      </if>
+      <if test="parentId != null and parentId != ''">
+        PARENT_ID_,
+      </if>
+      <if test="parentIds != null and parentIds != ''">
+        PARENT_IDS_,
+      </if>
+      <if test="permission != null and permission != ''">
+        PERMISSION_,
+      </if>
+      <if test="resourceType != null and resourceType != ''">
+        RESOURCE_TYPE_,
+      </if>
+      <if test="url != null and url != ''">
+        URL_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null and name != ''">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="available != null and available != ''">
+        #{available,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null and parentId != ''">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentIds != null and parentIds != ''">
+        #{parentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null and permission != ''">
+        #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceType != null and resourceType != ''">
+        #{resourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null and url != ''">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fy.PermissionMannger.Entity.SysPermission">
+    <!--@mbg.generated-->
+    update SYS_PERMISSION
+    <set>
+      <if test="name != null and name != ''">
+        NAME_ = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="available != null and available != ''">
+        AVAILABLE_ = #{available,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null and parentId != ''">
+        PARENT_ID_ = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentIds != null and parentIds != ''">
+        PARENT_IDS_ = #{parentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null and permission != ''">
+        PERMISSION_ = #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceType != null and resourceType != ''">
+        RESOURCE_TYPE_ = #{resourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null and url != ''">
+        URL_ = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fy.PermissionMannger.Entity.SysPermission">
+    <!--@mbg.generated-->
+    update SYS_PERMISSION
+    set NAME_ = #{name,jdbcType=VARCHAR},
+      AVAILABLE_ = #{available,jdbcType=VARCHAR},
+      PARENT_ID_ = #{parentId,jdbcType=VARCHAR},
+      PARENT_IDS_ = #{parentIds,jdbcType=VARCHAR},
+      PERMISSION_ = #{permission,jdbcType=VARCHAR},
+      RESOURCE_TYPE_ = #{resourceType,jdbcType=VARCHAR},
+      URL_ = #{url,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="findByAll" resultMap="BaseResultMap" parameterType="SysPermission">
+        select
+        <include refid="Base_Column_List" />
+        from SYS_PERMISSION
+        where 1=1
+        <if test="id != null and id != ''">
+            AND ID_ = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null and name != ''">
+            AND NAME_ = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="available != null and available != ''">
+            AND AVAILABLE_ = #{available,jdbcType=VARCHAR}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND PARENT_ID_ = #{parentId,jdbcType=VARCHAR}
+        </if>
+        <if test="parentIds != null and parentIds != ''">
+            AND PARENT_IDS_ = #{parentIds,jdbcType=VARCHAR}
+        </if>
+        <if test="permission != null and permission != ''">
+            AND PERMISSION_ = #{permission,jdbcType=VARCHAR}
+        </if>
+        <if test="resourceType != null and resourceType != ''">
+            AND RESOURCE_TYPE_ = #{resourceType,jdbcType=VARCHAR}
+        </if>
+        <if test="url != null and url != ''">
+            AND URL_ = #{url,jdbcType=VARCHAR}
+        </if>
+        ORDER BY ID_
+    </select>
+</mapper>

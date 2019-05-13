@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--sidebar start-->
+<aside>
+    <div id="sidebar"  class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu">
+            <!--
+            listClass:active
+            IClass:icon-dashboard、icon-book、icon-cogs、icon-tasks、icon-th、
+            -->
+            <li th:each="menu : ${session.userPermissions.sysPermissions}" th:class="${menu.leaf==false?'sub-menu':''}">
+                <a href="javascript:;" class="" th:onclick="changeMenu([[${menu}]])">
+                    <i th:class="${menu.iconCls}"></i>
+                    <span th:text="${menu.name}"></span>
+                    <span th:if="${menu.leaf==false}" class="arrow"></span>
+                </a>
+                <ul th:if="${menu.leaf==false}" class="sub">
+                    <li th:each="menuChildren : ${menu.children}">
+                        <a href="javascript:;" th:text="${menuChildren.name}" th:onclick="changeMenu([[${menuChildren}]])"></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="">
+                    <i class="icon-envelope"></i>
+                    <span>Mail </span>
+                    <span class="label label-danger pull-right mail-info">2</span>
+                </a>
+            </li>
+        </ul>
+        <!-- sidebar menu end-->
+    </div>
+
+    <script type="text/javascript">
+        function changeMenu(menu) {
+            if(menu.name&&menu.url){
+                top.framework.addTab(menu.name,menu.url);
+            }
+        }
+    </script>
+</aside>
+<!--sidebar end-->
+</body>
+
+</html>

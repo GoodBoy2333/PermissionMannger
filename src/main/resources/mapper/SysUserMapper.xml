@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.PermissionMannger.Mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.fy.PermissionMannger.Entity.SysUser">
+    <!--@mbg.generated-->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="USER_NAME_" jdbcType="VARCHAR" property="userName" />
+    <result column="USER_PWD_" jdbcType="VARCHAR" property="userPwd" />
+    <result column="TEL_" jdbcType="VARCHAR" property="tel" />
+    <result column="MAIL_" jdbcType="VARCHAR" property="mail" />
+    <result column="SEX_" jdbcType="VARCHAR" property="sex" />
+    <result column="CREATE_DATE_" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="LOGIN_DATE_" jdbcType="TIMESTAMP" property="loginDate" />
+    <result column="STATUS_" jdbcType="VARCHAR" property="status" />
+    <result column="SALT_" jdbcType="VARCHAR" property="salt" />
+    <collection property="sysRole" ofType="SysRole">
+        <id column="ROLE_ID_" jdbcType="VARCHAR" property="id" />
+        <result column="ROLE_NAME_" jdbcType="VARCHAR" property="roleName" />
+        <result column="ROLE_DESC_" jdbcType="VARCHAR" property="roleDesc" />
+        <collection property="sysPermissions" ofType="SysPermission">
+            <id column="PERMISSION_ID_" jdbcType="VARCHAR" property="id" />
+            <result column="NAME_" jdbcType="VARCHAR" property="name" />
+            <result column="AVAILABLE_" jdbcType="VARCHAR" property="available" />
+            <result column="PARENT_ID_" jdbcType="VARCHAR" property="parentId" />
+            <result column="PARENT_IDS_" jdbcType="VARCHAR" property="parentIds" />
+            <result column="PERMISSION_" jdbcType="VARCHAR" property="permission" />
+            <result column="RESOURCE_TYPE_" jdbcType="VARCHAR" property="resourceType" />
+            <result column="URL_" jdbcType="VARCHAR" property="url" />
+        </collection>
+    </collection>
+  </resultMap>
+
+    <resultMap id="InnerPermission_ResultMap" type="com.fy.PermissionMannger.Entity.SysUser">
+        <!--@mbg.generated-->
+        <id column="ID_" jdbcType="VARCHAR" property="id" />
+        <result column="USER_NAME_" jdbcType="VARCHAR" property="userName" />
+        <result column="USER_PWD_" jdbcType="VARCHAR" property="userPwd" />
+        <result column="TEL_" jdbcType="VARCHAR" property="tel" />
+        <result column="MAIL_" jdbcType="VARCHAR" property="mail" />
+        <result column="SEX_" jdbcType="VARCHAR" property="sex" />
+        <result column="CREATE_DATE_" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="LOGIN_DATE_" jdbcType="TIMESTAMP" property="loginDate" />
+        <result column="STATUS_" jdbcType="VARCHAR" property="status" />
+        <result column="SALT_" jdbcType="VARCHAR" property="salt" />
+        <collection property="sysPermissions" ofType="SysPermission">
+            <id column="PERMISSION_ID_" jdbcType="VARCHAR" property="id" />
+            <result column="NAME_" jdbcType="VARCHAR" property="name" />
+            <result column="AVAILABLE_" jdbcType="VARCHAR" property="available" />
+            <result column="PARENT_ID_" jdbcType="VARCHAR" property="parentId" />
+            <result column="PARENT_IDS_" jdbcType="VARCHAR" property="parentIds" />
+            <result column="PERMISSION_" jdbcType="VARCHAR" property="permission" />
+            <result column="RESOURCE_TYPE_" jdbcType="VARCHAR" property="resourceType" />
+            <result column="URL_" jdbcType="VARCHAR" property="url" />
+        </collection>
+    </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    ID_, USER_NAME_, USER_PWD_, TEL_, MAIL_, SEX_, CREATE_DATE_, LOGIN_DATE_, STATUS_,SALT_
+  </sql>
+    <sql id="InnerRole_Column_List">
+        A.ID_, A.USER_NAME_, A.USER_PWD_, A.TEL_, A.MAIL_, A.SEX_, A.CREATE_DATE_, A.LOGIN_DATE_, A.STATUS_,A.SALT_,
+        C.ID_ ROLE_ID_,C.ROLE_NAME_,C.ROLE_DESC_
+    </sql>
+    <sql id="InnerRole_Permission_Column_List">
+        A.ID_, A.USER_NAME_, A.USER_PWD_, A.TEL_, A.MAIL_, A.SEX_, A.CREATE_DATE_, A.LOGIN_DATE_, A.STATUS_,A.SALT_,
+        C.ID_ ROLE_ID_,C.ROLE_NAME_,C.ROLE_DESC_,
+		E.ID_ PERMISSION_ID_, E.NAME_, E.AVAILABLE_, E.PARENT_ID_, E.PARENT_IDS_, E.PERMISSION_, E.RESOURCE_TYPE_, E.URL_
+    </sql>
+    <sql id="InnerPermission_Column_List">
+        A.ID_, A.USER_NAME_, A.USER_PWD_, A.TEL_, A.MAIL_, A.SEX_, A.CREATE_DATE_, A.LOGIN_DATE_, A.STATUS_,A.SALT_,
+		E.ID_ PERMISSION_ID_, E.NAME_, E.AVAILABLE_, E.PARENT_ID_, E.PARENT_IDS_, E.PERMISSION_, E.RESOURCE_TYPE_, E.URL_
+    </sql>
+    <select id="selectRoleByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="InnerRole_Column_List" />
+        FROM SYS_USER A LEFT JOIN SYS_USER_ROLE B ON A.ID_=B.USER_ID_
+        LEFT JOIN SYS_ROLE C ON C.ID_=B.ROLE_ID_
+        where A.ID_ = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectRoleAndPermissionByPrimaryKey" resultMap="BaseResultMap">
+    SELECT
+    <include refid="InnerRole_Permission_Column_List" />
+    FROM SYS_USER	A LEFT JOIN SYS_USER_ROLE B ON A.ID_=B.USER_ID_
+    LEFT JOIN SYS_ROLE C ON C.ID_=B.ROLE_ID_
+    LEFT JOIN SYS_ROLE_PERMISSION D ON C.ID_=D.ROLE_ID_
+    LEFT JOIN SYS_PERMISSION E ON E.ID_=D.PERMISSION_ID_
+    WHERE A.ID_=#{id,jdbcType=VARCHAR}
+</select>
+
+    <select id="selectPermissionByPrimaryKey" resultMap="InnerPermission_ResultMap">
+        SELECT
+        <include refid="InnerPermission_Column_List" />
+        FROM SYS_USER	A LEFT JOIN SYS_USER_ROLE B ON A.ID_=B.USER_ID_
+        LEFT JOIN SYS_ROLE C ON C.ID_=B.ROLE_ID_
+        LEFT JOIN SYS_ROLE_PERMISSION D ON C.ID_=D.ROLE_ID_
+        LEFT JOIN SYS_PERMISSION E ON E.ID_=D.PERMISSION_ID_
+        WHERE E.RESOURCE_TYPE_='menu' and A.ID_=#{id,jdbcType=VARCHAR}
+    </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_USER
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from SYS_USER
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysUser" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_USER (USER_NAME_, USER_PWD_, TEL_, 
+      MAIL_, SEX_, CREATE_DATE_, 
+      LOGIN_DATE_, STATUS_,SALT_)
+    values (#{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{mail,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{loginDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}), #{salt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysUser" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null and userName != ''">
+        USER_NAME_,
+      </if>
+      <if test="userPwd != null and userPwd != ''">
+        USER_PWD_,
+      </if>
+      <if test="tel != null and tel != ''">
+        TEL_,
+      </if>
+      <if test="mail != null and mail != ''">
+        MAIL_,
+      </if>
+      <if test="sex != null and sex != ''">
+        SEX_,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE_,
+      </if>
+      <if test="loginDate != null">
+        LOGIN_DATE_,
+      </if>
+      <if test="status != null and status != ''">
+        STATUS_,
+      </if>
+    <if test="salt != null and salt != ''">
+        SALT_,
+    </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null and userName != ''">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null and userPwd != ''">
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null and tel != ''">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null and mail != ''">
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null and sex != ''">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginDate != null">
+        #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null and status != ''">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fy.PermissionMannger.Entity.SysUser">
+    <!--@mbg.generated-->
+    update SYS_USER
+    <set>
+      <if test="userName != null and userName != ''">
+        USER_NAME_ = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null and userPwd != ''">
+        USER_PWD_ = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null and tel != ''">
+        TEL_ = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null and mail != ''">
+        MAIL_ = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null and sex != ''">
+        SEX_ = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE_ = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginDate != null">
+        LOGIN_DATE_ = #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null and status != ''">
+        STATUS_ = #{status,jdbcType=VARCHAR},
+      </if>
+    <if test="salt != null and salt != ''">
+        SALT_ = #{salt,jdbcType=VARCHAR},
+    </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fy.PermissionMannger.Entity.SysUser">
+    <!--@mbg.generated-->
+    update SYS_USER
+    set USER_NAME_ = #{userName,jdbcType=VARCHAR},
+      USER_PWD_ = #{userPwd,jdbcType=VARCHAR},
+      TEL_ = #{tel,jdbcType=VARCHAR},
+      MAIL_ = #{mail,jdbcType=VARCHAR},
+      SEX_ = #{sex,jdbcType=VARCHAR},
+      CREATE_DATE_ = #{createDate,jdbcType=TIMESTAMP},
+      LOGIN_DATE_ = #{loginDate,jdbcType=TIMESTAMP},
+      STATUS_ = #{status,jdbcType=VARCHAR}
+      SALT_ = #{salt,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2019-05-04-->
+  <select id="findByAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_USER
+        where 1=1
+        <if test="id != null and id != ''">
+            and ID_=#{id,jdbcType=VARCHAR}
+        </if>
+        <if test="userName != null and userName != ''">
+            and USER_NAME_=#{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="userPwd != null and userPwd != ''">
+            and USER_PWD_=#{userPwd,jdbcType=VARCHAR}
+        </if>
+        <if test="tel != null and tel != ''">
+            and TEL_=#{tel,jdbcType=VARCHAR}
+        </if>
+        <if test="mail != null and mail != ''">
+            and MAIL_=#{mail,jdbcType=VARCHAR}
+        </if>
+        <if test="sex != null and sex != ''">
+            and SEX_=#{sex,jdbcType=VARCHAR}
+        </if>
+        <if test="createDate != null">
+            and CREATE_DATE_=#{createDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="loginDate != null">
+            and LOGIN_DATE_=#{loginDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="status != null and status != ''">
+            and STATUS_=#{status,jdbcType=VARCHAR}
+        </if>
+        <if test="salt != null and salt != ''">
+            and SALT_=#{salt,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

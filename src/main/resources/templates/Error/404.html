@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>404</title>
+
+    <div id="header" th:replace="Common/head :: head"></div>
+</head>
+
+  <body class="body-404">
+
+    <div class="container">
+
+      <section class="error-wrapper">
+          <i class="icon-404"></i>
+          <h1>404</h1>
+          <h2>页面丢失了...</h2>
+          <p class="page-404"><!--Something went wrong or that page doesn’t exist yet.--> <a th:href="@{/mainHome}">返回首页</a></p>
+      </section>
+
+    </div>
+
+
+  </body>
+</html>

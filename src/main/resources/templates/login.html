@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>欢迎登陆</title>
+    <!--公共头部引入-->
+    <div th:replace="Common/header :: head"></div>
+
+    <div th:replace="Common/head :: head"></div>
+</head>
+
+  <body class="login-body">
+    <div class="container">
+
+      <form class="form-signin" method="post" action="">
+        <h2 class="form-signin-heading"> 欢迎登陆 </h2>
+        <div class="login-wrap">
+            <input name="username" type="text" class="form-control" placeholder="User ID" autofocus>
+            <input name="password" type="password" class="form-control" placeholder="Password">
+            <input name="captchaCode" type="text" class="form-control" placeholder="验证码">
+            <label>
+                <img alt="验证码" onclick = "this.src='/img/getKaptchaImage?d='+new Date()*1" th:src="@{/img/getKaptchaImage}" />
+            </label>
+            <label class="checkbox">
+                <!--<input name="rememberMe" type="checkbox"> 记住我-->
+                <span class="pull-right"> <a href="#"> 忘记密码?</a></span>
+            </label>
+            <label th:text="${error_msg}" style="color: red"></label>
+            <button class="btn btn-lg btn-login btn-block" type="submit">登陆</button>
+            <!--<p>其他登录方式</p>-->
+            <!--<div class="login-social-link">
+                <a class="facebook">
+                    <i class="icon-facebook"></i>
+                    网易云
+                </a>
+                <a class="twitter">
+                    <i class="icon-twitter"></i>
+                    腾讯QQ
+                </a>
+            </div>-->
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </body>
+</html>

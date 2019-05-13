@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.PermissionMannger.Mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.fy.PermissionMannger.Entity.SysRole">
+    <!--@mbg.generated-->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="ROLE_NAME_" jdbcType="VARCHAR" property="roleName" />
+    <result column="ROLE_DESC_" jdbcType="VARCHAR" property="roleDesc" />
+    <collection property="sysUsers" ofType="SysUser">
+        <id column="USER_ID_" jdbcType="VARCHAR" property="id" />
+        <result column="USER_NAME_" jdbcType="VARCHAR" property="userName" />
+        <result column="USER_PWD_" jdbcType="VARCHAR" property="userPwd" />
+        <result column="TEL_" jdbcType="VARCHAR" property="tel" />
+        <result column="MAIL_" jdbcType="VARCHAR" property="mail" />
+        <result column="SEX_" jdbcType="VARCHAR" property="sex" />
+        <result column="CREATE_DATE_" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="LOGIN_DATE_" jdbcType="TIMESTAMP" property="loginDate" />
+        <result column="STATUS_" jdbcType="VARCHAR" property="status" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    ID_, ROLE_NAME_, ROLE_DESC_
+  </sql>
+    <sql id="InnerUser_Column_List">
+            A.ID_ USER_ID_, A.USER_NAME_, A.USER_PWD_, A.TEL_, A.MAIL_, A.SEX_, A.CREATE_DATE_, A.LOGIN_DATE_, A.STATUS_,
+            C.ID_,C.ROLE_NAME_,C.ROLE_DESC_
+    </sql>
+    <select id="selectUserByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="InnerUser_Column_List" />
+        FROM SYS_USER A LEFT JOIN SYS_USER_ROLE B ON A.ID_=B.USER_ID_
+        LEFT JOIN SYS_ROLE C ON C.ID_=B.ROLE_ID_
+        where C.ID_ = #{id,jdbcType=VARCHAR}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_ROLE
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from SYS_ROLE
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fy.PermissionMannger.Entity.SysRole">
+    <!--@mbg.generated-->
+    insert into SYS_ROLE (ID_, ROLE_NAME_, ROLE_DESC_
+      )
+    values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fy.PermissionMannger.Entity.SysRole">
+    <!--@mbg.generated-->
+    insert into SYS_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null and id != ''">
+        ID_,
+      </if>
+      <if test="roleName != null and roleName != ''">
+        ROLE_NAME_,
+      </if>
+      <if test="roleDesc != null and roleDesc != ''">
+        ROLE_DESC_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null and id != ''">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null and roleName != ''">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null and roleDesc != ''">
+        #{roleDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fy.PermissionMannger.Entity.SysRole">
+    <!--@mbg.generated-->
+    update SYS_ROLE
+    <set>
+      <if test="roleName != null and roleName != ''">
+        ROLE_NAME_ = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null and roleDesc != ''">
+        ROLE_DESC_ = #{roleDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fy.PermissionMannger.Entity.SysRole">
+    <!--@mbg.generated-->
+    update SYS_ROLE
+    set ROLE_NAME_ = #{roleName,jdbcType=VARCHAR},
+      ROLE_DESC_ = #{roleDesc,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

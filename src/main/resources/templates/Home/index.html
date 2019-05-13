@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+
+    <title>权限管理平台</title>
+
+    <div th:replace="Common/head :: head"></div>
+</head>
+
+<body>
+
+<section id="container" class="">
+    <div th:replace="Common/header :: header"></div>
+    <div th:replace="Common/aside :: aside"></div>
+    <!--main content start-->
+    <section id="main-content">
+        <div th:replace="Common/section :: section"></div>
+    </section>
+    <!--main content end-->
+</section>
+<div id="header" th:include="Common/head :: footer"></div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function() {
+        //let userPermissions=[[${session.userPermissions}]];
+    });
+</script>
+</html>
