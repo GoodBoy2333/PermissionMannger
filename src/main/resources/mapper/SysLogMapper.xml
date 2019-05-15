@@ -43,6 +43,9 @@
     <!--@mbg.generated-->
     insert into SYS_LOG
     <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null and id != ''">
+            ID_,
+        </if>
       <if test="qqip != null and qqip != ''">
         QQIP_,
       </if>
@@ -72,6 +75,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null and id != ''">
+            #{id,jdbcType=VARCHAR},
+        </if>
       <if test="qqip != null and qqip != ''">
         #{qqip,jdbcType=VARCHAR},
       </if>

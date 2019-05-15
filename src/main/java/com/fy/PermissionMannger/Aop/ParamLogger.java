@@ -81,9 +81,13 @@ public class ParamLogger {
         //设置执行时间
         sysLog.setZxsj(String.valueOf(endTime - startTime));
         //设置返回值
-        sysLog.setFhz(JSONObject.toJSONString(retVal));
+        //sysLog.setFhz(JSONObject.toJSONString(retVal));
         //插入日志
-        sysLogService.insert(sysLog);
+        try {
+            sysLogService.insertSelective(sysLog);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return retVal;
     }
 
