@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.PermissionMannger.Mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.fy.PermissionMannger.Entity.SysLog">
+    <!--@mbg.generated-->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="QQIP_" jdbcType="VARCHAR" property="qqip" />
+    <result column="QQLJ_" jdbcType="VARCHAR" property="qqlj" />
+    <result column="QQFS_" jdbcType="VARCHAR" property="qqfs" />
+    <result column="FFMS_" jdbcType="VARCHAR" property="ffms" />
+    <result column="QQCS_" jdbcType="VARCHAR" property="qqcs" />
+    <result column="ZXSJ_" jdbcType="VARCHAR" property="zxsj" />
+    <result column="FHZ_" jdbcType="VARCHAR" property="fhz" />
+    <result column="USERID_" jdbcType="VARCHAR" property="userid" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    ID_, QQIP_, QQLJ_, QQFS_, FFMS_, QQCS_, ZXSJ_, FHZ_, USERID_, USERNAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_LOG
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from SYS_LOG
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysLog" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_LOG (ID_,QQIP_, QQLJ_, QQFS_,
+      FFMS_, QQCS_, ZXSJ_, FHZ_, 
+      USERID_, USERNAME)
+    values (#{id,jdbcType=VARCHAR},#{qqip,jdbcType=VARCHAR}, #{qqlj,jdbcType=VARCHAR}, #{qqfs,jdbcType=VARCHAR},
+      #{ffms,jdbcType=VARCHAR}, #{qqcs,jdbcType=VARCHAR}, #{zxsj,jdbcType=VARCHAR}, #{fhz,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID_" keyProperty="id" parameterType="com.fy.PermissionMannger.Entity.SysLog" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into SYS_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="qqip != null and qqip != ''">
+        QQIP_,
+      </if>
+      <if test="qqlj != null and qqlj != ''">
+        QQLJ_,
+      </if>
+      <if test="qqfs != null and qqfs != ''">
+        QQFS_,
+      </if>
+      <if test="ffms != null and ffms != ''">
+        FFMS_,
+      </if>
+      <if test="qqcs != null and qqcs != ''">
+        QQCS_,
+      </if>
+      <if test="zxsj != null and zxsj != ''">
+        ZXSJ_,
+      </if>
+      <if test="fhz != null and fhz != ''">
+        FHZ_,
+      </if>
+      <if test="userid != null and userid != ''">
+        USERID_,
+      </if>
+      <if test="username != null and username != ''">
+        USERNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="qqip != null and qqip != ''">
+        #{qqip,jdbcType=VARCHAR},
+      </if>
+      <if test="qqlj != null and qqlj != ''">
+        #{qqlj,jdbcType=VARCHAR},
+      </if>
+      <if test="qqfs != null and qqfs != ''">
+        #{qqfs,jdbcType=VARCHAR},
+      </if>
+      <if test="ffms != null and ffms != ''">
+        #{ffms,jdbcType=VARCHAR},
+      </if>
+      <if test="qqcs != null and qqcs != ''">
+        #{qqcs,jdbcType=VARCHAR},
+      </if>
+      <if test="zxsj != null and zxsj != ''">
+        #{zxsj,jdbcType=VARCHAR},
+      </if>
+      <if test="fhz != null and fhz != ''">
+        #{fhz,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null and userid != ''">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null and username != ''">
+        #{username,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fy.PermissionMannger.Entity.SysLog">
+    <!--@mbg.generated-->
+    update SYS_LOG
+    <set>
+      <if test="qqip != null and qqip != ''">
+        QQIP_ = #{qqip,jdbcType=VARCHAR},
+      </if>
+      <if test="qqlj != null and qqlj != ''">
+        QQLJ_ = #{qqlj,jdbcType=VARCHAR},
+      </if>
+      <if test="qqfs != null and qqfs != ''">
+        QQFS_ = #{qqfs,jdbcType=VARCHAR},
+      </if>
+      <if test="ffms != null and ffms != ''">
+        FFMS_ = #{ffms,jdbcType=VARCHAR},
+      </if>
+      <if test="qqcs != null and qqcs != ''">
+        QQCS_ = #{qqcs,jdbcType=VARCHAR},
+      </if>
+      <if test="zxsj != null and zxsj != ''">
+        ZXSJ_ = #{zxsj,jdbcType=VARCHAR},
+      </if>
+      <if test="fhz != null and fhz != ''">
+        FHZ_ = #{fhz,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null and userid != ''">
+        USERID_ = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null and username != ''">
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fy.PermissionMannger.Entity.SysLog">
+    <!--@mbg.generated-->
+    update SYS_LOG
+    set QQIP_ = #{qqip,jdbcType=VARCHAR},
+      QQLJ_ = #{qqlj,jdbcType=VARCHAR},
+      QQFS_ = #{qqfs,jdbcType=VARCHAR},
+      FFMS_ = #{ffms,jdbcType=VARCHAR},
+      QQCS_ = #{qqcs,jdbcType=VARCHAR},
+      ZXSJ_ = #{zxsj,jdbcType=VARCHAR},
+      FHZ_ = #{fhz,jdbcType=VARCHAR},
+      USERID_ = #{userid,jdbcType=VARCHAR},
+      USERNAME = #{username,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

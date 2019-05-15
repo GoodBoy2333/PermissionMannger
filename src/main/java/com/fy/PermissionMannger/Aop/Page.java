@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Aspect
 @Configuration
-public class PageUtil {
+public class Page {
 
     @Autowired
     private RedisTemplate redisTemplate;
